@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
 use Illuminate\Http\Request;
 
@@ -16,8 +17,12 @@ class ArticleController extends Controller
     }
 
     //* Metodo per salvare un articolo all'interno del database
-    public function store(Request $request)
+    public function store(ArticleRequest $request)
     {
+        //caro conttroller mostrami solo ed esclusivamente i dati che ti stanno arrivando dal form
+        //dump e die
+        // dd($request->all());
+
         // //! Creiamo una nuova istanza del modello
         // $article = new Article();
 
@@ -30,13 +35,15 @@ class ArticleController extends Controller
         // //! Salva Article all'interno della tabella articles
         // $article->save();
 
+        //mass assignment
         $article = Article::create([
             'title' => $request->title,
             'subtitle' => $request->subtitle,
             'body' => $request->body,
+            'cover' => $request->file('cover')->store('covers', 'public')
         ]);
 
-        return redirect(route('homepage'));
+        return redirect(route('homepage'))->with('successMessage','Articolo creato con successo');
     }
 
     //* Metodo per visualizzare tutti gli articoli

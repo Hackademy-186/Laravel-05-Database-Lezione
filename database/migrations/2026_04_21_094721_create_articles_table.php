@@ -16,6 +16,7 @@ return new class extends Migration
             //title, subtitle, body
             $table->id();
 
+            //string è il contenuto tra parentesi mettiamo il nome della colonna
             $table->string('title');
             $table->string('subtitle');
             $table->text('body');
