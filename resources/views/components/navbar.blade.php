@@ -12,18 +12,31 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ route('article.index') }}">Tutti gli articoli</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('article.create') }}">Inserisci un articolo</a>
-        </li>
+        @auth
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('article.create') }}">Inserisci un articolo</a>
+          </li>
+        @endauth
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
+            @auth
+            {{-- richiedo a laravel di chiamare la classe che gestisce hli utenti autenticati, prende l'utente autenticato in quel momento e di questo mostrarmi il nome --}}
+              Ciao {{Auth::user()->name}}
+            @else
+              Ciao, accedi!
+            @endauth
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          @guest
+            <li><a class="dropdown-item" href="{{route('login')}}">Login</a></li>
+            <li><a class="dropdown-item" href="{{route('register')}}">Register</a></li>
+          @else
+            {{-- caro anchor quando ti cliccherò non dovrai cercare l'haref ma dovrai invece cercare un form con id "#form-logout" e cliccare il tasto attivando la funzione "submit()" --}}
+            <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); document.querySelector('#form-logout').submit();">Logout</a></li>
+            <form action="{{route('logout')}}" method="POST" id="form-logout" class="d-none">
+              @csrf
+            </form>
+          @endguest
           </ul>
         </li>
       </ul>

@@ -14,3 +14,15 @@ Route::post('/salva-articolo', [ArticleController::class, 'store'])->name('artic
 
 //* Mostra la pagina con tutti gli articoli
 Route::get('/tutti-gli-articoli', [ArticleController::class, 'index'])->name('article.index');
+
+//* Rotta che mostra il dettaglio dell'articolo
+Route::get('/dettaglio-articolo/{article}', [ArticleController::class, 'show'])->name('article.show');
+
+//* Rotta che mostra il form per la modifica dell'articolo
+Route::get('/modifica-articolo/{article}', [ArticleController::class, 'edit'])->name('article.edit');
+
+//* Rotta che andrà a modificare effettivamente l'articolo
+Route::put('/aggiorna-articolo/{article}', [ArticleController::class, 'update'])->name('article.update');
+
+//* Rotta che andrà a cancellare l'articolo
+Route::delete('cancella-articolo/{article}' , [ArticleController::class, 'destroy'])->name('article.delete');
