@@ -7,6 +7,7 @@ use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller implements HasMiddleware
 {
@@ -14,7 +15,7 @@ class ArticleController extends Controller implements HasMiddleware
     {
         return [
             //questo buttafuori controlla se un utente è autenticato(o ha fatto login o a ha fatto register)
-            new Middleware('auth', except:['index']),
+            new Middleware('auth', except:['index', 'show']),
         ];
     }
 
@@ -62,7 +63,8 @@ class ArticleController extends Controller implements HasMiddleware
             'title' => $request->title,
             'subtitle' => $request->subtitle,
             'body' => $request->body,
-            'cover' => $request->file('cover')->store('covers', 'public')
+            'cover' => $request->file('cover')->store('covers', 'public'),
+            'user_id' => Auth::user()->id
         ]);
 
         //redirect verso una rotta di tipo get

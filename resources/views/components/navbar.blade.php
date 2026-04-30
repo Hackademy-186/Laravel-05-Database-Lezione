@@ -36,6 +36,7 @@
             <form action="{{route('logout')}}" method="POST" id="form-logout" class="d-none">
               @csrf
             </form>
+            <li><a class="dropdown-item" href="{{route('user.dashboard')}}">Profilo</a></li>
           @endguest
           </ul>
         </li>

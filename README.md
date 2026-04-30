@@ -68,3 +68,14 @@ php artisan make:model NomeModello -mcr crea:
 - La migrazione
 - Il controller
 - All'interno del controller tutti i metodi del crud che abbiamo visto
+
+forelse
+if($user->articles)
+foreach($user->articles as $article)
+    //do something
+else
+    //do something
+
+
+On delete cascade
+- Cancella una entità e tutto quello che le è collegato

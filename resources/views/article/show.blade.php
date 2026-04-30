@@ -23,13 +23,25 @@
                             <h5 class="card-title">{{ $article->title }}</h5>
                             <h6 class="card-subtitle mb-2 text-body-secondary">{{ $article->subtitle }}</h6>
                             <p class="card-text">{{ $article->body }}</p>
+                            @if ($article->user)
+                                {{-- traversamento dei modelli --}}
+                                <p>Inserito da: {{$article->user->name}}</p>
+                            @else
+                                <p>Nessun utente ha inserito questo articolo</p>
+                            @endif
                             <a href="{{route('article.index')}}" class="btn btn-primary">Torna indietro</a>
-                            <a href="{{route('article.edit', $article)}}" class="btn btn-warning">Modifica</a>
-                            <a class="btn btn-danger" href="#" onclick="event.preventDefault(); document.querySelector('#form-delete').submit();">Cancella</a>
-                            <form action="{{route('article.delete', $article)}}" method="POST" id="form-delete" class="d-none">
-                                @csrf
-                                @method('delete')
-                            </form>
+                            @auth
+                                {{-- @if($article->user) --}}
+                                    @if($article->user && Auth::user()->id == $article->user->id)
+                                        <a href="{{route('article.edit', $article)}}" class="btn btn-warning">Modifica</a>
+                                        <a class="btn btn-danger" href="#" onclick="event.preventDefault(); document.querySelector('#form-delete').submit();">Cancella</a>
+                                        <form action="{{route('article.delete', $article)}}" method="POST" id="form-delete" class="d-none">
+                                            @csrf
+                                            @method('delete')
+                                        </form>
+                                    @endif
+                                {{-- @endif --}}
+                            @endauth
                         </div>
                     </div>
                 </div>

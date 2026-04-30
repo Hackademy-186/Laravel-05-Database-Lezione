@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -28,5 +29,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    //Questa funzione descrive la 1-N
+    //Deve restituire il risultato di un HasMany
+    //deve avere il nome al plurale del modello singolare collegato
+    public function articles(): HasMany
+    {
+        //restituirà la collection con tutti gli articoli collegati all'utente che sto considerando
+        //lla collection può essere vuota, possedere un solo elemento ma anche N elementi
+        return $this->hasMany(Article::class);
     }
 }

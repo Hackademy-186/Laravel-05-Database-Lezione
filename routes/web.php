@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PublicController::class, 'homepage'])->name('homepage');
 
+//*Rotte per la gestione dell'utente
+Route::get('/user/dashboard', [PublicController::class, 'userDashboard'])->name('user.dashboard');
+Route::delete('/user/delete', [PublicController::class, 'userDelete'])->name('user.delete');
+
 //* Mostra il form degli articoli agli utenti
 Route::get('/nuovo-articolo', [ArticleController::class, 'create'])->name('article.create');
 

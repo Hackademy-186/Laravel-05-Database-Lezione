@@ -25,12 +25,18 @@
                             <h6 class="card-subtitle mb-2 text-body-secondary">{{ $article->subtitle }}</h6>
                             <p class="card-text">{{ $article->body }}</p>
                             <a href="{{route('article.show', $article)}}" class="btn btn-primary">Dettaglio</a>
-                            <a href="{{route('article.edit', $article)}}" class="btn btn-warning">Modifica</a>
-                            <a class="btn btn-danger" href="#" onclick="event.preventDefault(); document.querySelector('#form-delete-{{$article->id}}').submit();">Cancella</a>
-                            <form action="{{route('article.delete', $article)}}" method="POST" id="form-delete-{{$article->id}}" class="d-none">
-                                @csrf
-                                @method('delete')
-                            </form>
+                            @auth
+                                {{-- @if($article->user) --}}
+                                    @if($article->user && Auth::user()->id == $article->user->id)
+                                        <a href="{{route('article.edit', $article)}}" class="btn btn-warning">Modifica</a>
+                                        <a class="btn btn-danger" href="#" onclick="event.preventDefault(); document.querySelector('#form-delete-{{$article->id}}').submit();">Cancella</a>
+                                        <form action="{{route('article.delete', $article)}}" method="POST" id="form-delete-{{$article->id}}" class="d-none">
+                                            @csrf
+                                            @method('delete')
+                                        </form>
+                                    @endif
+                                {{-- @endif --}}
+                            @endauth
                         </div>
                     </div>
                 </div>

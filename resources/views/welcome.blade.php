@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-12 text-center text-white">
                 <h1 class="display-1">
-                    I miei articoli
+                    Blog
                 </h1>
             </div>
         </div>
