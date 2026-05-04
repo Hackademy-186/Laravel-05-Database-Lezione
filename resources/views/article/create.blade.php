@@ -57,6 +57,16 @@
                         @enderror
                     </div>
 
+                    <div class="mb-3">
+                        <label for="tags" class="form-label">Tags:</label>
+                        {{-- name="tags[]" inserisce nella request una array, quello che ci sarà all'interno lo deciderem noi in base alla selezione che faremo delle opzioni disponibili --}}
+                        <select name="tags[]" multiple id="tags" class="form-control">
+                            @foreach ($tags as $tag)
+                                <option value="{{$tag->id}}">{{$tag->name}}</option>                      
+                            @endforeach
+                        </select>
+                    </div>
+
                     <button type="submit" class="btn btn-info">Inserisci articolo</button>
                 </form>
             </div>

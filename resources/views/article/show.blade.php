@@ -29,6 +29,16 @@
                             @else
                                 <p>Nessun utente ha inserito questo articolo</p>
                             @endif
+
+                            <p>Tags:</p>
+                            @if (count($article->tags) > 0)
+                                @foreach ($article->tags as $tag)
+                                    <p>{{$tag->name}}</p>
+                                @endforeach
+                            @else
+                                <p>Nessun tag collegato</p>
+                            @endif
+
                             <a href="{{route('article.index')}}" class="btn btn-primary">Torna indietro</a>
                             @auth
                                 {{-- @if($article->user) --}}

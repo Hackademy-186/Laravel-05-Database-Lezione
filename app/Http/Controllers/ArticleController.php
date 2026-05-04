@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -36,7 +37,8 @@ class ArticleController extends Controller implements HasMiddleware
     //* Metodo per visualizzare pagina di un form che permettera' di inserire l'articolo
     public function create()
     {
-        return view('article.create');
+        $tags = Tag::all(); //select * from tags
+        return view('article.create', compact('tags'));
     }
 
     //* Metodo per salvare un articolo all'interno del database
@@ -66,6 +68,9 @@ class ArticleController extends Controller implements HasMiddleware
             'cover' => $request->file('cover')->store('covers', 'public'),
             'user_id' => Auth::user()->id
         ]);
+
+        //dall'articolo recupera la sua collection tags e riempila con ciò che ti sto passando
+        $article->tags()->attach($request->tags);
 
         //redirect verso una rotta di tipo get
         return redirect(route('homepage'))->with('successMessage','Articolo creato con successo');
@@ -98,6 +103,20 @@ class ArticleController extends Controller implements HasMiddleware
     }
 
     public function destroy(Article $article){
+        
+        //PRIMA SGANCIO L'INFORMAZIONE
+        //Dall'articolo prendi la sacca con tutti i tag che sono all'interno ed tirali fuori uno per uno
+        foreach($article->tags as $tag){
+            //dal tag PERO' devi estrarre l'informazione di tutti gli articoli a cui è collegato
+            //prendi poi l'informazione del collegamento che ha con l'articolo che voglio eliminare
+            //e cancellala
+            $tag->articles()->detach($article->id);
+            //Però tutte l'operazione fatta prima avviene solo a livello di collection, dobbiamo 
+            //necessariamente inserirla definitivamente nel database tramite il comando save()
+            $tag->save();
+        }
+
+        //POI ELIMINO L'ARTICOLO
         $article->delete();
 
         return redirect(route('homepage'))->with('successMessage','Articolo cancellato con successo');
