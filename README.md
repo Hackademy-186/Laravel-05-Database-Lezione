@@ -79,3 +79,38 @@ else
 
 On delete cascade
 - Cancella una entità e tutto quello che le è collegato
+
+
+Name dei form
+- In un form i name servono affinchè il dato nella request abbia una chiave nel chiave valore che si forma ogni volta che spingiamo il tasto submit
+
+
+
+type="checkbox" -> definisce la tipologia dell'input, in questo è una checkbox
+name="tags_selected[]" -> definisce la chiave con cui il dato deve viaggiare nella request, in questo caso è un array perchè devo gestire e manipolare più dati, non uno solo
+value="{{$tag->id}}"-> definisce il valore effettivo che devo manipolare
+id="tag_selected_{{$tag->id}}" -> Serve ad identificare l'elemento all'interno del DOM, univocamente
+                                           
+@if (in_array($tag->id, $article->tags->pluck('id')->toArray())) checked @endif
+la funzione in_array è una funzione php, che vuole due parametri, il primo è l'elemento da cercare, il secondo è l'insieme all'interno del quale cercare.
+Nel nostro caso stiamo prendendo l'id del tag, che è quello che ci interessa, poi stiamo creando un array di id di tutti i tag collegati all'articolo, e all'interno di quest'ultimo andiamo propri a cercare l'id del tag che abbiamo inserito come primo parametro della funzione in_array
+
+$article->tags->pluck('id')->toArray() -> questo codice recupera tutti i tag collegati all'articolo ($article->tags) , dell'informazione appena recuperata prende solo gli id, che è quello che ci interessa (pluck('id')), una volta fatto questo trasforma tutti in una array (toArray())
+
+L'effetto del codice completo è quello di darmi un bel true se l'id del tag è presente nell'array di tutti gli id dei tag collegati alarticolo
+
+
+@if (in_array($tag->id, $article->tags->pluck('id')->toArray())) checked @endif
+l'effetto di tutto questo codice è inserire l'attributo checked
+
+
+
+$tags->whereNotIn('id', $article->tags->pluck('id'))
+whereNotIn è una funzione php che vuole due parametri il primo è il dato da cercare, il secondo è l'insieme in cui cercare. Il risultato di questa funzione è True se il dato da cercare non è nell'insieme, false se invece  è presente. E' lopposto di in_array
+
+
+@foreach($tags->whereNotIn('id', $article->tags->pluck('id')) as $tag)
+                                <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                            @endforeach
+
+l'effetto di questo codice è proprio quello di mostrare solo ed esclusivamente tutti i tag che non sono collegati all'articolo

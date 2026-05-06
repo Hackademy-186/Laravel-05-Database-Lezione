@@ -62,6 +62,58 @@
                         @enderror
                     </div>
 
+                    {{-- CHECKBOX DEI TAG ESISTENTI --}}
+                    <div class="mb-3">
+                        <label for="tagcheck">Tag collegati:</label>
+                        <div>
+                            @foreach($article->tags as $tag)
+                                <div class="form-check">
+                                    <input type="checkbox"
+                                            name="tags_selected[]"
+                                            value="{{$tag->id}}"
+                                            id="tag_selected_{{$tag->id}}"
+                                            class="form-check-input"
+                                            @if (in_array($tag->id, $article->tags->pluck('id')->toArray())) checked @endif
+                                            >
+                                    <label for="tag_selected_{{$tag->id}}" class="form-check-label">
+                                        {{$tag->name}}
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+
+                    {{-- <div class="mb-3">
+                        <label for="tagcheck">Tag collegati:</label>
+                        <div>
+                            @foreach($tags as $tag)
+                                <div class="form-check">
+                                    <input type="checkbox"
+                                            name="tags_selected[]"
+                                            value="{{$tag->id}}"
+                                            id="tag_selected_{{$tag->id}}"
+                                            class="form-check-input"
+                                            @if (in_array($tag->id, $article->tags->pluck('id')->toArray())) checked @endif
+                                            >
+                                    <label for="tag_selected_{{$tag->id}}" class="form-check-label">
+                                        {{$tag->name}}
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div> --}}
+
+                    <div class="mb-3">
+                        <label for="inputTag" class="form-label">Aggiungi nuovi tag:</label>
+                        <select name="tag_new[]" multiple id="inputTag" class="form-control">
+                            {{-- Non considerare i tag che hanno gli id presenti nella collezione dei tag collegati al prodotto --}}
+                            @foreach($tags->whereNotIn('id', $article->tags->pluck('id')) as $tag)
+                                <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <button type="submit" class="btn btn-info">Modifica articolo</button>
                 </form>
             </div>

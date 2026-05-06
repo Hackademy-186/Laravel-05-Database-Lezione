@@ -46,7 +46,7 @@ class ArticleController extends Controller implements HasMiddleware
     {
         //caro conttroller mostrami solo ed esclusivamente i dati che ti stanno arrivando dal form
         //dump e die
-        // dd($request->all());
+        dd($request->all());
 
         // //! Creiamo una nuova istanza del modello
         // $article = new Article();
@@ -82,13 +82,15 @@ class ArticleController extends Controller implements HasMiddleware
 
     //questa rotta è collegata ad una rotta parametrica, il nome del parametro dichiarato nella rotta deve corrispondere esattamente al parametro del metodo ed il valore del dato che stiamo passando alla vista
     public function edit(Article $article){
+        // $tags = $article->tags;//Tutti e soli i tag collegati all'articolo
         // return view('article.edit', ['article' => $article]);
-        return view('article.edit', compact('article'));
+        $tags = Tag::all();
+        return view('article.edit', compact('article', 'tags'));
     }
 
     //
     public function update(Request $request, Article $article){
-        //dd($request->all(), $article);
+        // dd($request->all(), $article);
         $article->update([
             'title' => $request->title,
             'subtitle' => $request->subtitle,
@@ -98,6 +100,18 @@ class ArticleController extends Controller implements HasMiddleware
             //se no lasci quella che stava
             'cover' => $request->has('cover') ? $request->file('cover')->store('covers', 'public') : $article->cover
         ]);
+
+        $exsisting = $request->tags_selected;
+        $new = $request->tag_new;
+
+        //sync e attach agiscono sulla pivot
+        $article->tags()->sync($exsisting);
+
+        //$article->tags()->sync($new);
+
+        if(!empty($new)){
+            $article->tags()->attach($new);
+        }
 
         return redirect(route('homepage'))->with('successMessage','Articolo modificato con successo');
     }
